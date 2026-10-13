@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GEO Engine</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; background: #0f1117; color: #eee; }
+  h1 { color: #818cf8; }
+  input, textarea, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #333; background: #1a1d27; color: #eee; }
+  button { background: #6366f1; cursor: pointer; font-weight: bold; }
+  button:hover { background: #818cf8; }
+  pre { background: #1a1d27; padding: 16px; border-radius: 8px; overflow: auto; white-space: pre-wrap; }
+  .card { background: #161922; padding: 20px; border-radius: 12px; margin: 16px 0; border: 1px solid #2a2f42; }
+</style>
+</head>
+<body>
+  <h1>GEO Engine</h1>
+  <p>Free Generative Engine Optimization tool</p>
+
+  <div class="card">
+    <h3>Generate GEO Page</h3>
+    <input id="keyword" placeholder="Keyword (e.g. best AI tools for startups)" />
+    <input id="domain" placeholder="Domain (optional)" />
+    <button onclick="generate()">Generate</button>
+    <pre id="output">Result will appear here...</pre>
+  </div>
+
+  <div class="card">
+    <h3>Crawl Website</h3>
+    <input id="url" placeholder="https://example.com" />
+    <button onclick="crawl()">Crawl</button>
+    <pre id="crawlResult">Crawl result...</pre>
+  </div>
+
+<script>
+async function generate() {
+  const keyword = document.getElementById('keyword').value;
+  const domain = document.getElementById('domain').value;
+  document.getElementById('output').textContent = 'Generating...';
+  const res = await fetch('/api/generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ keyword, domain })
+  });
+  const data = await res.json();
+  document.getElementById('output').textContent = data.content || JSON.stringify(data, null, 2);
+}
+
+async function crawl() {
+  const url = document.getElementById('url').value;
+  document.getElementById('crawlResult').textContent = 'Crawling...';
+  const res = await fetch('/api/crawl', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url })
+  });
+  const data = await res.json();
+  document.getElementById('crawlResult').textContent = JSON.stringify(data, null, 2);
+}
+</script>
+</body>
+</html>
